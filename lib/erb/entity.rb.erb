@@ -1,0 +1,13 @@
+require_relative 'entity'
+
+class <%= "#{@obj.name} < Entity" %>
+<% for @atrb in @obj.attrs -%>
+  attr_reader :<%= @atrb.name %>
+<% end -%>
+
+  def initialize(<%= @obj.attrs.map(&:name).join(':, ')%>:)
+<% for @atrb in @obj.attrs -%>
+    @<%= @atrb.name %> = <%= @atrb.type.name %>.(<%= @atrb.name %>)
+<% end -%>
+  end
+end

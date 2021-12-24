@@ -1,0 +1,16 @@
+require_relative 'service'
+
+class <%= "#{@obj.name} < Service" %>
+  def initialize(<%= @obj.params.map(&:name).join(':, ')%>:)
+<% for @para in @obj.params -%>
+    @<%= @para.name %> = <%= @para.type.name %>.(<%= @para.name %>)
+<% end -%>
+  end
+
+  def call
+    # check results?
+<% for @para in @obj.results -%>
+    # <%= @para.type.name %>.(<%= @para.name %>)
+<% end -%>
+  end
+end
