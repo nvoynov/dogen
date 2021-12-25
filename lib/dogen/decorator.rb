@@ -26,9 +26,21 @@ module Dogen
     #   Decorator.new(e2).const # => 'UsersDomain'
     #
     # @return [String] Const(name)
-    def const
-      name.downcase.strip.gsub(/\s{1,}/, '_')
-        .split(?_).map(&:capitalize).join
+    def const(prefix = '')
+      s = prefix.empty? ? name : "#{prefix} #{name}"
+      s.downcase.strip.gsub(/\s{1,}/, '_')
+       .split(?_).map(&:capitalize).join
+    end
+
+    # TODO: maybe it should be extracted
+    # def normalized
+    #   name.downcase.strip.gsub(/\s{1,}/, '_')
+    # end
+
+    # Returns Ruby way file name
+    def source_file
+      norm = name.downcase.strip.gsub(/\s{1,}/, '_')
+      "#{norm}.rb"
     end
 
     # @return [String] full const from :name with :unit
@@ -36,8 +48,8 @@ module Dogen
     # @examples
     #   e = Domain.new('users_domain', 'Dogen')
     #   Decorator.new(e).full_const # => 'Dogen::UsersDomain'
-    def full_const
-      unit.empty? ? const : "#{unit}::#{const}"
+    def full_const(prefix = '')
+      unit.empty? ? const(prefix) : "#{unit}::#{const(prefix)}"
     end
   end
 end

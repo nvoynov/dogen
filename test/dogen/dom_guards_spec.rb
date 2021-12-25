@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
 require_relative 'shared_guard_specs'
-include Dogen
 
 describe 'Domain Guards' do
 

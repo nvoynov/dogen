@@ -1,0 +1,12 @@
+require_relative '../arguards'
+
+module <%= @object.const %>
+  module Entities
+
+    class Entity
+      include <%= @object.const %>::ArGuards
+
+    end
+
+  end
+end

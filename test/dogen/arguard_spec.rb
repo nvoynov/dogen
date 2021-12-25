@@ -1,12 +1,11 @@
 require_relative '../spec_helper'
-include Dogen
 
-describe AGuard do
+describe ArGuard do
 
   let(:gname) { 'string[5]' }
   let(:gerrm) { 'must be String[5]' }
   let(:guard) {
-    AGuard.new(gname, gerrm,
+    ArGuard.new(gname, gerrm,
       Proc.new { |v| v.is_a?(String) && v.length < 6 })
   }
 

@@ -5,7 +5,7 @@ module Dogen
   class DSL
     attr_reader :dom
 
-    def self.build(name = '', desc = '', &block)
+    def self.build(name = 'Something', desc = '', &block)
       dsl = new(name, desc)
       dsl.instance_eval(&block) if block_given?
       dsl.dom

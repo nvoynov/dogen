@@ -1,4 +1,5 @@
 require 'erb'
+require_relative 'decorator'
 
 module Dogen
 
@@ -20,6 +21,7 @@ module Dogen
     def initialize(obj, erb)
       @erb = ERB.new(erb, nil, "-")
       @obj = obj
+      @decorator = Decorator
     end
 
     # Renders @obj according to @erb

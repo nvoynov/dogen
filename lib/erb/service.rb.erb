@@ -1,16 +1,27 @@
 require_relative 'service'
 
-class <%= "#{@obj.name} < Service" %>
-  def initialize(<%= @obj.params.map(&:name).join(':, ')%>:)
-<% for @para in @obj.params -%>
-    @<%= @para.name %> = <%= @para.type.name %>.(<%= @para.name %>)
-<% end -%>
-  end
+module <%= @object.full_const.split(/::/).first %>
+  module Services
 
-  def call
-    # check results?
-<% for @para in @obj.results -%>
-    # <%= @para.type.name %>.(<%= @para.name %>)
+    class <%= "#{@object.const} < Service" %>
+
+      def initialize(<%= @object.params.map(&:name).join(':, ')%>:)
+<% for @para in @object.params -%>
+<% decor = @decorator.new(@para.type) -%>
+<% guard = "Guard#{decor.const}" -%>
+        @<%= @para.name %> = <%= guard %>.(<%= @para.name %>)
 <% end -%>
+      end
+
+      def call
+        # check contracts
+<% for @para in @object.results -%>
+<% decor = @decorator.new(@para.type) -%>
+<% guard = "Guard#{decor.const}" -%>
+        # <%= guard %>.(<%= @para.name %> = ...)
+<% end -%>
+      end
+    end
+
   end
 end

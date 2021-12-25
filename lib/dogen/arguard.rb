@@ -1,26 +1,31 @@
 module Dogen
 
-  # Argument Guard
+  # The factory for guarding argument values
   #
   # @example
   #    # create a new guard for strings
-  #    GuardString = AGuard.new('string', 'must be String'
+  #    GuardString = ArGuard.new('string', 'must be String'
   #      Proc.new{|v| v.is_a?(String)})
   #
-  #    # use the guard somewhere in initialize
-  #    class GuardArgument
+  #    # guarding construtor arguments
+  #    class Entity
   #      def initialize(arg)
   #        @arg = GuardString.(arg)
-  #        @arg = GuardString.(arg, 'arg')
-  #        @arg = GuardString.(arg, 'arg', 'specific message')
+  #        # => ArgumentError: :arg must be String
+  #        # @arg = GuardString.(arg, 'name')
+  #        # => ArgumentError: :name must be String
+  #        # @arg = GuardString.(arg, 'name', 'should be String')
+  #        # => ArgumentError: :name should be String
   #      end
   #    end
-  class AGuard
+  #
+  #
+  class ArGuard
 
     # @param name [String] name of the guard
     # @param meesage [String] ArgumentError message
     # @param block [Proc] spec of the guard, must return true or false
-    # @return [AGuard]
+    # @return [ArGuard]
     def self.new(name, message, block)
       Class.new do
         define_singleton_method "call" do |val, aname = name, amessage = message|

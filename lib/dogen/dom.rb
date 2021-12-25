@@ -1,42 +1,43 @@
-require_relative 'AGuard'
+require_relative 'arguard'
 
 module Dogen
 
-  # TODO: might contain spaces or not?
-  GuardName = AGuard.new("name", "must be String or Symbol",
-    Proc.new{|v| v.is_a?(String) || v.is_a?(Symbol)})
+  GuardName = ArGuard.new("name", "must be String[3,] or Symbol",
+    Proc.new{|v| (v.is_a?(String) && v.strip.length > 2) || v.is_a?(Symbol)})
 
-  GuardSpec = AGuard.new("spec",
+  GuardSpec = ArGuard.new("spec",
     ":% must be String stands for Proc like '|v| v.is_a?(String)'",
     Proc.new{|v| v.is_a?(String) && v =~ /v\./})
 
-  GuardErrm = AGuard.new("errm", "must be String",
+  GuardErrm = ArGuard.new("errm", "must be String",
     Proc.new{|v| v.is_a?(String)})
 
-  GuardType = AGuard.new("errm", "must be Type",
+  GuardType = ArGuard.new("errm", "must be Type",
     Proc.new{|v| v.is_a?(Type)})
 
-  GuardPara = AGuard.new("errm", "must be Para",
+  GuardPara = ArGuard.new("errm", "must be Para",
     Proc.new{|v| v.is_a?(Para)})
 
-  GuardDesc = AGuard.new("desc", "must be String",
+  GuardDesc = ArGuard.new("desc", "must be String",
     Proc.new{|v| v.is_a?(String)})
 
-  GuardService = AGuard.new("service", "must be Service",
+  GuardService = ArGuard.new("service", "must be Service",
     Proc.new{|v| v.is_a?(Service)})
 
-  GuardEntity = AGuard.new("entity", "must be Entity",
+  GuardEntity = ArGuard.new("entity", "must be Entity",
     Proc.new{|v| v.is_a?(Entity)})
 
-  GuardEntityOrType  = AGuard.new("entity", "must be Type|Entity",
+  GuardEntityOrType  = ArGuard.new("entity", "must be Type|Entity",
     Proc.new{|v| v.is_a?(Entity) || v.is_a?(Type)})
 
-  GuardCall = AGuard.new("call", "must be Call",
+  GuardCall = ArGuard.new("call", "must be Call",
     Proc.new{|v| v.is_a?(Call)})
 
-  GuardDomain = AGuard.new("domain", "must be Domain",
+  GuardDomain = ArGuard.new("domain", "must be Domain",
     Proc.new{|v| v.is_a?(Domain)})
 
+  # The basic concept of a typed value that can be checked type,
+  #   but not a type that hold value.
   class Type
     attr_reader :name
     attr_reader :desc
@@ -51,6 +52,7 @@ module Dogen
     end
   end
 
+  # The basic concept of an checked paramter, that used in entities and services
   class Para
     attr_reader :name
     attr_reader :desc
@@ -65,6 +67,7 @@ module Dogen
     end
   end
 
+  # The basic concept of data, that domain's services work with
   class Entity
     attr_reader :name
     attr_reader :desc
@@ -84,6 +87,7 @@ module Dogen
     alias :<< :add_attr
   end
 
+  # The basic concept of a service that domain provides
   class Service
     attr_reader :name
     attr_reader :desc
@@ -103,11 +107,12 @@ module Dogen
     end
 
     def add_result(param)
-      @params << GuardPara.(param)
+      @results << GuardPara.(param)
       param
     end
   end
 
+  # The domain description that consits of entities and services
   class Domain
     attr_accessor :name
     attr_accessor :desc
@@ -116,7 +121,7 @@ module Dogen
     attr_reader :entities
     attr_reader :services
 
-    def initialize(name = '', desc = '')
+    def initialize(name = 'Unnamed', desc = '')
       @name = GuardName.(name)
       @desc = GuardDesc.(desc)
       @types = []

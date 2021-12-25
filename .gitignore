@@ -6,4 +6,5 @@
 /pkg/
 /spec/reports/
 /tmp/
-/test/users/
+/test/samples/
+/test/sandbox*.rb

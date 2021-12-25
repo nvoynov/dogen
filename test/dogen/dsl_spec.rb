@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
 require_relative 'shared_domain'
-include Dogen
 
 describe DSL do
 
