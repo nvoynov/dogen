@@ -8,6 +8,8 @@ TODO
 - [ ] GitHub
 - [ ] Write Yard-style comments
 - [ ] Combine with Cleon (ArgCheck to ArGuard) it must not ovewrite orginal services and entities
+- [ ] Error handlers
+- [ ] helpers Dogen.dsl, Dogen.read, Dogen.generate ...
 - [ ] Generate tests for services, if it is a gem?, one test per one result
 - [ ] Try entities as service and entities parameters!
 - [ ] Prepare playground (Rake Cleon Dogen)

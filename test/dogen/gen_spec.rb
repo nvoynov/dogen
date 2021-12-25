@@ -6,12 +6,12 @@ describe Gen do
 
   it 'just dry-run' do
     Sandbox.() do
-      Gen.(dom, erblib: Dogen.root)
+      Gen.(dom)
       ruby_code = "require './_dogen'; puts '42'"
-      out, err = capture_subprocess_io do
+      out, _ = capture_subprocess_io do
         system "ruby -e \"#{ruby_code}\""
       end
-      assert_match /42/, out
+      assert_match %r{42}, out
     end
   end
 

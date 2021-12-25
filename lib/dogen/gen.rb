@@ -4,8 +4,8 @@ module Dogen
 
   # Source code generator for Domain
   class Gen
-    def self.call(*args, **para)
-      new(*args, **para).call
+    def self.call(*args)
+      new(*args).call
     end
 
     private_class_method :new
@@ -24,9 +24,6 @@ module Dogen
       gen_services
       gen_dogenreq
     end
-
-    # SOURCE_GUARD = 'arguards.rb'
-    REQUIRE_DGEN = 'dogenr.rb'
 
     def provide_dependencies
       Dir.chdir(@lib) do

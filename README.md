@@ -6,35 +6,47 @@ Welcome to the Domain Generator (Dogen for simplicity), created for the glory of
 
 Cleon's way can seem quite cumbersome and time-consuming, and the most boring part there is creating and requiring files (entities, services). It's time to throw away this boredom and bring back freedom from the framework with generators.
 
-```ruby
-dom = DSL.build do
-  name 'spec'
-  desc 'Spec Domain'
+There is part of the [Users Domain](https://github.com/nvoynov/cleon-users) expressed through Dogen DSL. The full version can be found [here](__TODO__)
 
-  type :string, 'just String', errm: 'must be string',
-    spec: 'v.is_a?(String)'
+```ruby
+DSL.build do
+  name 'Users'
+  desc 'Users Management (Cleon)'
+
+  type :five_or_more, 'integer',
+    errm: 'must be Integer >= 5',
+    spec: 'v.is_a?(Integer) && v >= 5'
+
+  type :password, 'password',
+    errm: 'must be String[8,50]',
+    spec: 'v.is_a?(String) && v.length.between?(8, 50)'
+
+  # just skipped ...
+
+  entity :credentials do
+    atrb :email, 'email used as login', type: :email
+    atrb :password, 'password', type: :password
+  end
 
   entity :user do
-    atrb 'member', :type => :string
-    atrb 'email', :type => :string
+    atrb :uid, 'unique user identifier', type: :uuid, default: nil
+    atrb :name, 'name', type: :user_name
+    atrb :email, 'email', type: :email
   end
 
   service :register_user do
-    param 'email', type: :string
-    param 'password', :type => :string
-    result 'user', :type => :string
+    param :name, 'name', type: :user_name
+    param :email, 'email', type: :email
+    param :password, 'password', type: :password
+    result :user, 'registered user', type: :user
   end
 
-  # staggering zone
-  url 'register_user', service: :register_user
-  lib 'register_user', service: :register_user
+  # jsut skipped ...
 end
 Gen.(dom)
 ```
 
-Have the code executed, one can get your domain skeleton of types, entities, and services. The domain's type system will be used in entities and services for checking arguments.
-
-TODO: create [Users Domain](https://github.com/nvoynov/cleon-users) as an example and place under lib/examples. Seeing "Users Domain" code imagine that all entities and services code was just generated and only staff you should write - body of `serice#call` methods
+Have the code executed, one can get a Ruby skeleton of described domain source files with arguments guard, entities, and services. The domain's type system will be used in entities and services for checking arguments.
 
 ## Installation
 

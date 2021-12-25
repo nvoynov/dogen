@@ -19,7 +19,8 @@ module Dogen
     end
 
     def initialize(obj, erb)
-      @erb = ERB.new(erb, nil, "-")
+      # @erb = ERB.new(erb, nil, "-")
+      @erb = ERB.new(erb, trim_mode: '-')
       @obj = obj
       @decorator = Decorator
     end
