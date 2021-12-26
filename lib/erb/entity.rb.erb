@@ -3,11 +3,17 @@ require_relative 'entity'
 module <%= @object.full_const.split(/::/).first %>
   module Entities
 
+    # <%= @object.desc %>
     class <%= "#{@object.const} < Entity" %>
 <% for @atrb in @object.attrs -%>
+      # <%= @atrb.desc %>
       attr_reader :<%= @atrb.name %>
 <% end -%>
 
+<% for @atrb in @object.attrs -%>
+<% decor = @decorator.new(@atrb.type) -%>
+      # @param <%= @atrb.name %> [<%= decor.const %>] <% @atrb.desc %>
+<% end -%>
       def initialize(<%= @object.attrs.map(&:name).join(':, ')%>:)
 <% for @atrb in @object.attrs -%>
 <% decor = @decorator.new(@atrb.type) -%>

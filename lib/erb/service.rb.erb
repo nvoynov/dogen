@@ -3,8 +3,13 @@ require_relative 'service'
 module <%= @object.full_const.split(/::/).first %>
   module Services
 
+    # <%= @object.desc %>
     class <%= "#{@object.const} < Service" %>
 
+<% for @para in @object.params -%>
+<% decor = @decorator.new(@para.type) -%>
+      # @param <%= @para.name %> [<%= decor.const %>] <%= @para.desc %>
+<% end -%>
       def initialize(<%= @object.params.map(&:name).join(':, ')%>:)
 <% for @para in @object.params -%>
 <% decor = @decorator.new(@para.type) -%>
@@ -13,6 +18,11 @@ module <%= @object.full_const.split(/::/).first %>
 <% end -%>
       end
 
+<% for @para in @object.results -%>
+<% decor = @decorator.new(@para.type) -%>
+<% guard = "Guard#{decor.const}" -%>
+      # @return <%= @para.name %> [<%= decor.const %>] <%= @para.desc %>
+<% end -%>
       def call
         # check contracts
 <% for @para in @object.results -%>

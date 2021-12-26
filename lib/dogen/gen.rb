@@ -1,9 +1,14 @@
 require_relative 'render'
+require_relative 'branded'
 
 module Dogen
 
   # Source code generator for Domain
+  # TODO: check if generated file already exist, check changes rewrite/report
+  # TODO: create report on rewrited and unchanged files
   class Gen
+    include BrandedFile
+
     def self.call(*args)
       new(*args).call
     end
@@ -16,110 +21,85 @@ module Dogen
       @dom = GuardDomain.(dom)
       @lib = lib
       @inc = []
+      @log = []
     end
 
     def call
-      provide_dependencies
-      gen_entities
-      gen_services
-      gen_dogenreq
-    end
-
-    def provide_dependencies
       Dir.chdir(@lib) do
-        %w(entities services).each{|dir|
-          Dir.mkdir dir unless Dir.exist? dir
-        }
-
-        decorator = Decorator.new(@dom)
-        creator = ->(source, dest) {
-          return if File.exist? dest
-          erbt = File.read(source)
-          body = Render.(decorator, erbt)
-          body = [streamer, body.first].join(?\n)
-          File.write(dest, body)
-        }
-
-        src = File.join(Dogen.root, 'lib/erb/arguard.rb.erb')
-        dst = 'arguards.rb'
-        creator.call(src, dst)
-
-        src = File.join(Dogen.root, 'lib/erb/dogen-entity.rb.erb')
-        dst = File.join(@lib, 'entities', 'entity.rb')
-        creator.call(src, dst)
-
-        src = File.join(Dogen.root, 'lib/erb/dogen-service.rb.erb')
-        dst = File.join(@lib, 'services', 'service.rb')
-        creator.call(src, dst)
+        gen_dependencies
+        gen_collection('lib/erb/entity.rb.erb',  @dom.entities, 'entities')
+        gen_collection('lib/erb/service.rb.erb', @dom.services, 'services')
+        gen_dogenreq
       end
+      @log
     end
 
-    def gen_entities
-      src = File.join(Dogen.root, 'lib/erb/entity.rb.erb')
+    protected
+
+    def write_file(name, body)
+      if File.exist?(name)
+        return if eql_branded?(name, body)
+        name = name + '~'
+        @log << [name, '~']
+      end
+      write_branded(name, body, @dom.name)
+    end
+
+    # 1) checks serices/ and entities/ dirs, provide when not found
+    # 2) check services/service.rb, provide when not found
+    # 3) check entities/entity.rb, provide when not found
+    def gen_dependencies
+      %w(entities services).each{|dir| Dir.mkdir(dir) unless Dir.exist?(dir) }
+
+      decorator = Decorator.new(@dom)
+      generator = ->(source, dest) {
+        erbt = File.read(source)
+        body = Render.(decorator, erbt)
+        write_file(dest, body)
+      }
+
+      src = File.join(Dogen.root, 'lib/erb/arguard.rb.erb')
+      dst = 'arguards.rb'
+      generator.call(src, dst)
+
+      src = File.join(Dogen.root, 'lib/erb/dogen-entity.rb.erb')
+      dst = File.join('entities', 'entity.rb')
+      generator.call(src, dst) unless File.exist? dst
+
+      src = File.join(Dogen.root, 'lib/erb/dogen-service.rb.erb')
+      dst = File.join('services', 'service.rb')
+      generator.call(src, dst) unless File.exist? dst
+    end
+
+    def gen_collection(template, collection, unit)
+      src = File.join(Dogen.root, template)
       erb = File.read(src)
-      @dom.entities.map{|e|
-        Decorator.new(e, "#{@dom.name.capitalize}::Entities" )
-      }.each do |e|
-        body = Render.(e, erb)
-        src = File.join("entities", e.source_file)
-        body = [streamer, body].join(?\n)
-        File.write(File.join(@lib, src), body)
-        @inc << src
-      end
+      par = "#{@dom.name.capitalize}::#{unit.capitalize}"
+      collection
+        .map{|e| Decorator.new(e, par)}
+        .each do |e|
+          body = Render.(e, erb)
+          dest = File.join(unit, e.source_file)
+          write_file(dest, body)
+          @inc << dest
+        end
     end
 
-    def gen_services
-      src = File.join(Dogen.root, 'lib/erb/service.rb.erb')
-      erb = File.read(src)
-      @dom.services.map{|a|
-        Decorator.new(a, "#{@dom.name.capitalize}::Services")
-      }.each do |a|
-        body = Render.(a, erb)
-        src = File.join("services", a.source_file)
-        body = [streamer, body].join(?\n)
-        File.write(File.join(@lib, src), body)
-        @inc << src
-      end
-    end
-
-    # TODO: services.rb, entities.rb
+    # generates require section to compile together by Ruby
     def gen_dogenreq
-      generate = ->(ary, dest) {
+      generate = ->(dest, ary) {
         include = ary
           .map{|i| i.sub(/.rb\z/, '') }
           .map{|i| "require_relative '%s'" % i}
-        body = include.unshift(streamer).join(?\n)
-        File.write(dest, body)
+        body = include.join(?\n)
+        write_file(dest, body)
       }
-      dest = File.join(@lib, 'entities.rb')
-      part = @inc.select{|i| i =~ /entities/}
-      generate.call(part, dest)
 
-      dest = File.join(@lib, 'services.rb')
-      part = @inc.select{|i| i =~ /services/}
-      generate.call(part, dest)
-
-      dest = File.join(@lib, '_dogen.rb')
-      part = %w(arguards.rb entities.rb services.rb)
-      generate.call(part, dest)
+      generate.call('entities.rb', @inc.select{|i| i =~ /entities/})
+      generate.call('services.rb', @inc.select{|i| i =~ /services/})
+      generate.call('_dogen.rb',
+        %w(arguards.rb entities.rb services.rb))
     end
-
-    def streamer
-      STREAMER % [timestamp, @dom.name]
-    end
-
-    def timestamp
-      Time.now.strftime('on %B %e, %Y at %H:%M:%S')
-    end
-
-    STREAMER = <<~EOF
-      # This file generated by Dogen %s
-      # The domain model "%s"
-      # --
-      # [Dogen](https://github.com/nvoynov/dogen)
-      # [Cleon](https://github.com/nvoynov/cleon)
-      #
-    EOF
   end
 
 end

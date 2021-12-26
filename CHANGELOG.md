@@ -5,9 +5,11 @@ TODO
 - [*] Generate `dogen.rb` wich requires all generated code
 - [*] Reach its successful execution by `ruby -e "..."`
 - [*] Combine ArGuards in one file, definition and guards
-- [ ] GitHub
-- [ ] Write Yard-style comments
-- [ ] Combine with Cleon (ArgCheck to ArGuard) it must not ovewrite orginal services and entities
+- [*] GitHub
+- [*] Check if file exists already, rewrite or not
+- [*] Write Yard-style comments
+- [ ] Combine with Cleon (ArgCheck to ArGuard) it must not overwrite original services and entities
+- [ ] tests ensure that it does not overwrite changed files
 - [ ] Error handlers
 - [ ] helpers Dogen.dsl, Dogen.read, Dogen.generate ...
 - [ ] Generate tests for services, if it is a gem?, one test per one result
@@ -26,6 +28,12 @@ TODO
   - players readme
   - Rakefile
 
+
+## [0.1.1] - 2021-12-26
+
+- Changed `arguards.rb` and now it combines ArGuard and all guards of the model
+- Generator improved. Before file writing it checks if a file with the same name exist. When it is exists, the file content checks for content changes. If there are no changes - it just skipped; conversely it assumes that the file content was changed by hands intentionally and creates __TODO__ what mark?
+- Generator improved. Now it describe parameters in Yard-like way for entities and services; also attr_readers in entities.
 
 ## [0.1.0] - 2021-12-23
 
