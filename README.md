@@ -1,3 +1,4 @@
+[![Ruby](https://github.com/nvoynov/dogen/actions/workflows/main.yml/badge.svg)](https://github.com/nvoynov/dogen/actions/workflows/main.yml)
 # Dogen
 
 UNDER CONSTRUCTION
