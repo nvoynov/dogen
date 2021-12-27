@@ -15,4 +15,11 @@ describe Gen do
     end
   end
 
+  describe '#call' do
+    it 'must generate model sources'
+    it 'must create .rb~ and @log when target file exists and changed'
+    it 'must create service.rb and entity.rb when these do not exist'
+    it 'must left original service.rb and entity.rb'
+  end
+
 end

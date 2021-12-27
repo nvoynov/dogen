@@ -39,11 +39,11 @@ module <%= @object.const %>
 
 <% for @type in @object.types -%>
 <% @guard = @decorator.new(@type) -%>
+
     # <%= @guard.desc.empty? ? @guard.name : @guard.desc %>
     <%= @guard.const("Guard") %> = ArGuard.new('<%= @guard.name %>',
       '<%= @guard.errm %>',
       Proc.new {|v| <%= @guard.spec %>})
 <% end %>
-
   end
 end

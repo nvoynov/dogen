@@ -24,8 +24,11 @@ describe DogenBranded do
       branded.write(dogname, content)
       assert File.exist? dogname
       assert branded.file_branded?(dogname)
-      assert branded.eql_branded?(dogname, content)
-      refute branded.eql_branded?(dogname, another)
+      refute branded.file_changed?(dogname)
+
+      bann, body = branded.read_branded(dogname)
+      File.write(dogname, [bann, body, 'change'].join)
+      assert branded.file_changed?(dogname)
     end
   end
 end

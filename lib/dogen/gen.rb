@@ -36,12 +36,15 @@ module Dogen
 
     protected
 
+    # @param name [String] filename
+    # @param body [String|Array] content
     def write_file(name, body)
       if File.exist?(name)
-        return if eql_branded?(name, body)
-        name = name + '~'
+        # when generated file was changed (md5(body))
+        name = name + '~' if file_changed?(name)
         @log << [name, '~']
       end
+      body, _ = body if body.is_a? Array
       write_branded(name, body, @dom.name)
     end
 
