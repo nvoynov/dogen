@@ -12,7 +12,7 @@ module Dogen
           puts "  created #{DOMDIR}"
         end
         sample = File.join(Dogen.root, 'lib/erb/demo_domain.rb')
-        FileUtils.cp sample, DOMDIR
+        FileUtils.cp sample, File.join(DOMDIR, DOMSRC)
       end
     end
 
@@ -48,6 +48,7 @@ module Dogen
       DSL.build {|dsl| dsl.instance_eval code }
     end
 
+    DOMSRC = 'demo_domain.dogen'
     DOMDIR = 'model'
     BANNER = <<~EOF
       -= Dogen v#{Dogen::VERSION} =- is a domain skeleton generator

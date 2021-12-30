@@ -13,9 +13,11 @@ describe 'exe/dogen' do
   describe '$ample' do
     it 'must copy sample.rb file into model dir' do
       SpecTemp.() do
-        out, err = capture_subprocess_io { system "ruby exe/dogen $ample" }
+        out, err = capture_subprocess_io { system "dogen $ample" }
         puts out
-        puts err        
+        puts err
+        puts Dir.glob('**/*')
+        assert File.exist?(File.join(Dogen::CLI::DOMDIR, Dogen::CLI::DOMSRC))
       end
     end
   end
