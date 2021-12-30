@@ -21,4 +21,19 @@ describe 'exe/dogen' do
       end
     end
   end
+
+  describe 'dogen <model>' do
+    it 'must create skeleton' do
+      it 'must copy sample.rb file into model dir' do
+        SpecTemp.() do
+          system "dogen $ample"
+          source = File.join(Dogen::CLI::DOMDIR, Dogen::CLI::DOMSRC)
+          out, err = capture_subprocess_io { system "dogen #{source}" }
+          puts out
+          puts err
+          puts Dir.glob('**/*')
+        end
+      end
+    end
+  end
 end

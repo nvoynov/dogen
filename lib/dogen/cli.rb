@@ -11,7 +11,7 @@ module Dogen
           Dir.mkdir(DOMDIR)
           puts "  created #{DOMDIR}"
         end
-        sample = File.join(Dogen.root, 'lib/erb/demo_domain.rb')
+        sample = File.join(Dogen.root, "lib/erb/#{DOMSRC}")
         FileUtils.cp sample, File.join(DOMDIR, DOMSRC)
       end
     end
