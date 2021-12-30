@@ -1,4 +1,4 @@
-require_relative 'dom'
+require_relative 'domain'
 
 module Dogen
 
@@ -118,18 +118,6 @@ module Dogen
       EOF
       ) unless s
       s
-    end
-
-    def web(name, desc = '', service:)
-      s = check_and_get_service!(service)
-      c = Call.new(name, desc, service: s)
-      @dom.add_webcall(c)
-    end
-
-    def lib(name, desc = '', service:)
-      s = check_and_get_service!(service)
-      c = Call.new(name, desc, service: s)
-      @dom.add_libcall(c)
     end
 
   end

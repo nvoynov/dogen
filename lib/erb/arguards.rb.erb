@@ -1,0 +1,11 @@
+module <%= @model.root_const %>
+  module ArGuards
+
+<% for @guard in @model.items -%>
+    # <%= @guard.desc.empty? ? @guard.name : @guard.desc %>
+    Guard<%= @guard.const %> = ArGuard.new('<%= @guard.name %>',
+      '<%= @guard.errm %>',
+      Proc.new {|v| <%= @guard.spec %>})
+<% end %>
+  end
+end

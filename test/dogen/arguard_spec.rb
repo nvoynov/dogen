@@ -1,5 +1,6 @@
 require_relative '../spec_helper'
 
+# TODO: it should be moved to Cleon
 describe ArGuard do
 
   let(:gname) { 'string[5]' }

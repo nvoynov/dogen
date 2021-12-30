@@ -14,7 +14,7 @@ module Dogen
 
     # tests if file is branded
     def file_branded?(name)
-      bann, body = read_branded(name)
+      bann, _ = read_branded(name)
       chk0, chk5 = BANNER.lines.then{|l| [l[0], l[5]]}
       ban0, ban5 = bann.lines.then{|l| [l[0], l[5]]}
       (ban0 == chk0) && (ban5 == chk5)
@@ -46,6 +46,7 @@ module Dogen
       # The domain model "%s"
       # --
       # [Dogen](https://github.com/nvoynov/dogen)
+      # [Cleon](https://github.com/nvoynov/cleon)
       #
 
     EOF

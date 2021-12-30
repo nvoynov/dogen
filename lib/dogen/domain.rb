@@ -85,6 +85,7 @@ module Dogen
     end
 
     alias :<< :add_attr
+    alias :params :attrs # hack to provide unified code in erb
   end
 
   # The basic concept of a service that domain provides

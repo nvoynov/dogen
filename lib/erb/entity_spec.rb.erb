@@ -1,0 +1,13 @@
+require_relative '../../spec_helper'
+include <%= @model.root_const %>::Entities
+
+describe <%= @model.const %> do
+
+  let(:entitiy) { <%= @model.const %>.new(<%= @model.keyword_arguments %>) }
+
+  describe '#new' do
+    it 'must create <%= @model.const %>' do
+      # assert_instance_of <%= @model.const %>, entity
+    end
+  end
+end

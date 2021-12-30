@@ -2,7 +2,7 @@
 require 'dogen'
 include Dogen
 
-def build_users_domain
+def build_demo_domain
   DSL.build do
     name 'Users'
     desc 'Users Management (Cleon)'

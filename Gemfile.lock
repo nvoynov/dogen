@@ -2,10 +2,12 @@ PATH
   remote: .
   specs:
     dogen (0.1.0)
+      cleon (~> 0.3.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    cleon (0.3.1)
     docile (1.4.0)
     minitest (5.15.0)
     rake (13.0.6)

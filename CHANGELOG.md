@@ -1,8 +1,20 @@
 ## [Unreleased]
 
+it generates, but no compile at the moment ... something with arguard, try by hand .. but it require "cli"
+
+dog
+doc/users.rb  
+lib
+lib/users
+lib/users.rb
+test
+
+$ dogen mod/users.rb - reads the model and generate, it's only destity to generate!
+
 TODO
 
-- [ ] Combine with Cleon (Cleon must replace ArgCheck for ArGuard)
+- [ ] Cleon should have option to clone with using Guards, because it damn convenient to have `cleon service register_user name email --advanced`
+- [ ] Refactor Cleon::Generator based on Dogen::Generator
 - [ ] helpers Dogen.dsl, Dogen.read, Dogen.generate ... rather Rakefile?
 - [ ] Error handlers
 - [ ] Generate tests for services, if it is a gem?, one test per one result
@@ -11,7 +23,7 @@ TODO
 - [ ] Sinatra API generator
 - [ ] Client library generator for Sinatra API
 
-## [0.1.1] - 2021-12-26
+## [0.2.0] - 2021-12-26
 
 - Changed `arguards.rb` and now it combines ArGuard and all guards of the model
 - Generator improved. Now it describe parameters in Yard-like way for entities and services; also attr_readers in entities.

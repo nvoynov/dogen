@@ -1,34 +1,37 @@
 require_relative 'service'
 
-module <%= @object.full_const.split(/::/).first %>
+module <%= @model.root_const %>
   module Services
 
-    # <%= @object.desc %>
-    class <%= "#{@object.const} < Service" %>
+    # <%= @model.desc %>
+    class <%= "#{@model.const} < Service" %>
 
-<% for @para in @object.params -%>
-<% decor = @decorator.new(@para.type) -%>
+<% for @para in @model.params -%>
+<% decor = @deco.new(@para.type) -%>
       # @param <%= @para.name %> [<%= decor.const %>] <%= @para.desc %>
 <% end -%>
-      def initialize(<%= @object.params.map(&:name).join(':, ')%>:)
-<% for @para in @object.params -%>
-<% decor = @decorator.new(@para.type) -%>
+      def initialize(<%= @model.keyword_arguments %>)
+<% for @para in @model.params -%>
+<% decor = @deco.new(@para.type) -%>
 <% guard = "Guard#{decor.const}" -%>
         @<%= @para.name %> = <%= guard %>.(<%= @para.name %>)
 <% end -%>
       end
 
-<% for @para in @object.results -%>
-<% decor = @decorator.new(@para.type) -%>
+<% for @para in @model.results -%>
+<% decor = @deco.new(@para.type) -%>
 <% guard = "Guard#{decor.const}" -%>
       # @return <%= @para.name %> [<%= decor.const %>] <%= @para.desc %>
 <% end -%>
       def call
-        # check contracts
-<% for @para in @object.results -%>
-<% decor = @decorator.new(@para.type) -%>
+<% unless @model.params.empty? -%>
+<% signature = @model.params.map{|i| "@#{i.name}"}.join(', ') -%>
+        # <%= @para.name %> = gateway.find_<%= @para.name %>(<%= signature %>)
+<% end -%>
+<% for @para in @model.results -%>
+<% decor = @deco.new(@para.type) -%>
 <% guard = "Guard#{decor.const}" -%>
-        # <%= guard %>.(<%= @para.name %> = ...)
+        # <%= guard %>.(<%= @para.name %>)
 <% end -%>
       end
     end

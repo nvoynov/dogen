@@ -1,0 +1,23 @@
+require_relative '../../spec_helper'
+include <%= @model.root_const %>::Services
+
+describe <%= @model.const %> do
+
+<% unless @model.params.empty? -%>
+  let(:params) { {<%= @model.keyword_arguments %>} }
+<% end -%>
+  let(:service) { <%= @model.const %> }
+
+  describe '#call' do
+    it 'must return guarded result' do
+      # stubbing gateway ...
+      # @gateway = Minitest::Mock.new
+      # @gateway.expect(:find_user, nil, [String])
+      #
+      # <%= @model.root_const %>.stub :gateway, @gateway do
+      #   result = <%= @model.const %>.(**params)
+      #   assert GuardResult.(result), result
+      # end
+    end
+  end
+end
