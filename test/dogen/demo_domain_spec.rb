@@ -41,9 +41,9 @@ describe 'Generate Demo domain' do
 
   describe '#call(dom, path)' do
     it 'must generate list of :created' do
-      # bundle gem :name --quiet
-      SpecGem.('temp', true) do
-        log = Generator.(domain, Dir.pwd)
+      SpecGem.('temp') do
+        log = nil
+        _, _ = capture_subprocess_io { log = Generator.(domain, Dir.pwd) }
         assert_equal created, log
 
         # Dir.chdir('lib') do

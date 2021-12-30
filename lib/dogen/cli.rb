@@ -1,3 +1,4 @@
+require 'cleon'
 require_relative 'version'
 
 module Dogen
@@ -12,7 +13,7 @@ module Dogen
           puts "  created #{DOMDIR}"
         end
         sample = File.join(Dogen.root, "lib/erb/#{DOMSRC}")
-        FileUtils.cp sample, File.join(DOMDIR, DOMSRC)
+        FileUtils.cp sample, sample_name
       end
     end
 
@@ -21,19 +22,51 @@ module Dogen
         domain = load(model)
         dir = sanitize(domain.name) unless dir
         puts "Dogen: generate skeleton for '#{domain.name}'.."
-        unless Dir.exist?(dir)
-          Dir.mkdir(dir)
-          puts "  created #{dir}"
-        end
+        prepare_skeleton(dir)
         log = Generator.(domain, dir)
         log.each{|l| puts "  created #{l}"}
       end
+    end
+
+    def sample_name
+      File.join(DOMDIR, DOMSRC)
     end
 
     private
 
     def sanitize(str)
       str.downcase.strip.gsub(/\s{1,}/, '_')
+    end
+
+    def prepare_skeleton(dir)
+      puts "Preparing skeleton directory..."
+
+      dirs = <<~EOF.lines.map(&:strip)
+        #{dir}
+        #{dir}/lib
+        #{dir}/lib/#{dir}
+        #{dir}/test
+      EOF
+
+      srcs = <<~EOF.lines.map(&:strip)
+        #{dir}/lib/#{dir}/version.rb
+        #{dir}/lib/#{dir}.rb
+        #{dir}/#{dir}.gemspec
+      EOF
+
+      dirs.each do |d|
+        unless Dir.exist?(d)
+          Dir.mkdir(d)
+          puts "  created #{d}"
+        end
+      end
+
+      srcs.each do |src|
+        unless File.exist?(src)
+          File.write(src, '')
+          puts "  created #{src}"
+        end
+      end
     end
 
     def guard_stderr

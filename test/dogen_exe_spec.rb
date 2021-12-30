@@ -1,6 +1,7 @@
 require_relative 'spec_helper'
+include Dogen
 
-describe 'exe/dogen' do
+describe 'dry-run exe/dogen' do
   let(:banner) { /-= Dogen/ }
 
   describe 'banner' do
@@ -13,26 +14,20 @@ describe 'exe/dogen' do
   describe '$ample' do
     it 'must copy sample.rb file into model dir' do
       SpecTemp.() do
-        out, err = capture_subprocess_io { system "dogen $ample" }
-        puts out
-        puts err
-        puts Dir.glob('**/*')
-        assert File.exist?(File.join(Dogen::CLI::DOMDIR, Dogen::CLI::DOMSRC))
+        _, _ = capture_subprocess_io { system "dogen $ample" }
+        assert File.exist?(CLI.sample_name)
       end
     end
   end
 
   describe 'dogen <model>' do
-    it 'must create skeleton' do
-      it 'must copy sample.rb file into model dir' do
-        SpecTemp.() do
+    it 'must copy sample.rb file into model dir' do
+      SpecGem.('users') do
+        source = CLI.sample_name
+        _, _ = capture_subprocess_io {
           system "dogen $ample"
-          source = File.join(Dogen::CLI::DOMDIR, Dogen::CLI::DOMSRC)
-          out, err = capture_subprocess_io { system "dogen #{source}" }
-          puts out
-          puts err
-          puts Dir.glob('**/*')
-        end
+          system "dogen #{source} .."
+        }
       end
     end
   end

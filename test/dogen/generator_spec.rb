@@ -48,7 +48,8 @@ describe Generator do
   describe '#call(dom, path)' do
     it 'must generate list of :created' do
       SpecGem.('temp') do
-        log = Generator.(domain, Dir.pwd)
+        log = nil
+        _, _ = capture_io { log = Generator.(domain, Dir.pwd) }        
         assert_equal created, log
       end
     end

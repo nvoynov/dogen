@@ -15,11 +15,8 @@ TODO
 
 - [ ] Cleon should have option to clone with using Guards, because it damn convenient to have `cleon service register_user name email --advanced`
 - [ ] Refactor Cleon::Generator based on Dogen::Generator
-- [ ] helpers Dogen.dsl, Dogen.read, Dogen.generate ... rather Rakefile?
-- [ ] Error handlers
-- [ ] Generate tests for services, if it is a gem?, one test per one result
+- [ ] Explore possible DSL errors Error handlers
 - [ ] Try entities as service and entities parameters!
-- [ ] Prepare playground (Rake Cleon Dogen)
 - [ ] Sinatra API generator
 - [ ] Client library generator for Sinatra API
 
