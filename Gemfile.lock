@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dogen (0.1.0)
+    dogen (0.3.0)
       cleon (~> 0.4.0)
 
 GEM

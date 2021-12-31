@@ -63,9 +63,9 @@ module Dogen
       For more information visit https://github.com/nvoynov/dogen
 
       Quickstart
-      1. add 'gem "dogen"' to your Gemfile
-      2. run 'dogen $ample'
-      3. run 'dogen model/sample.dogen'
+      1. $ gem install  dogen
+      2. $ dogen $ample'
+      3. $ dogen model/sample.dogen'
 
       COMMANDS:
         $ dogen DOMAIN [SKELETON]
