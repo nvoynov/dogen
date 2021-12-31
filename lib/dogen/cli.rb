@@ -56,7 +56,7 @@ module Dogen
       DSL.build {|dsl| dsl.instance_eval code }
     end
 
-    DOMSRC = 'demo_domain.dogen'
+    DOMSRC = 'sample.dogen'
     DOMDIR = 'model'
     BANNER = <<~EOF
       -= Dogen v#{Dogen::VERSION} =- is a domain skeleton generator
@@ -65,14 +65,14 @@ module Dogen
       Quickstart
       1. add 'gem "dogen"' to your Gemfile
       2. run 'dogen $ample'
-      3. run 'dogen model/sample.rb'
+      3. run 'dogen model/sample.dogen'
 
       COMMANDS:
         $ dogen DOMAIN [SKELETON]
           Creates the DOMAIN in the SKELETON directory
 
         $ dogen $ample
-          Imports sample model into ./model/sample.rb
+          Imports sample model into ./model/sample.dogen
     EOF
   end
 end

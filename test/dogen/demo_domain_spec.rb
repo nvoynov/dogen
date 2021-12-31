@@ -8,45 +8,39 @@ describe 'Generate Demo domain' do
 
   let(:created) {
     <<~EOF.lines.map(&:strip)
-      Clone Cleon to get service and entity abstractions!
-      lib/temp/services
-      lib/temp/entities
-      test/temp
-      test/temp/services
-      test/temp/entities
-      lib/temp/arguards.rb
-      test/temp/arguards_spec.rb
-      lib/temp/entities/credentials.rb
-      test/temp/entities/credentials_spec.rb
-      lib/temp/entities/user.rb
-      test/temp/entities/user_spec.rb
-      lib/temp/services/register_user.rb
-      test/temp/services/register_user_spec.rb
-      lib/temp/services/authenticate_user.rb
-      test/temp/services/authenticate_user_spec.rb
-      lib/temp/services/change_user_password.rb
-      test/temp/services/change_user_password_spec.rb
-      lib/temp/services/select_users.rb
-      test/temp/services/select_users_spec.rb
-      lib/temp/entities.rb
-      lib/temp/services.rb
+      Cloning Cleon might help this skeleton
+      lib
+      lib/users
+      lib/users/services
+      lib/users/entities
+      test
+      test/users
+      test/users/services
+      test/users/entities
+      lib/users/arguards.rb
+      test/users/arguards_spec.rb
+      lib/users/entities/credentials.rb
+      test/users/entities/credentials_spec.rb
+      lib/users/entities/user.rb
+      test/users/entities/user_spec.rb
+      lib/users/services/register_user.rb
+      test/users/services/register_user_spec.rb
+      lib/users/services/authenticate_user.rb
+      test/users/services/authenticate_user_spec.rb
+      lib/users/services/change_user_password.rb
+      test/users/services/change_user_password_spec.rb
+      lib/users/services/select_users.rb
+      test/users/services/select_users_spec.rb
+      lib/users/entities.rb
+      lib/users/services.rb
     EOF
   }
 
-  # describe 'sample' do
-  #   it 'must create sample' do
-  #     model = Decorator.new(domain)
-  #     Dir.chdir('test/samples') do
-  #       Generator.(domain, Dir.pwd)
-  #     end
-  #   end
-  # end
-
   describe '#call(dom, path)' do
     it 'must generate list of :created' do
-      SpecGem.('temp') do
-        log = nil
-        _, _ = capture_subprocess_io { log = Generator.(domain, Dir.pwd) }
+      SpecTemp.() do
+        home = Home.new(domain.name)
+        log = Generator.(domain, home.base)
         assert_equal created, log
 
         # Dir.chdir('lib') do

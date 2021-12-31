@@ -20,4 +20,4 @@ if arg1.downcase == '$ample'
   exit
 end
 
-Dogen::CLI.dogen(arg1, arg2)
+Dogen::CLI.dogen(arg1)

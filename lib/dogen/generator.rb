@@ -28,11 +28,9 @@ module Dogen
       @renderers = {}
     end
 
-    CLONE_CLEON_MSG = "Clone Cleon to get service and entity abstractions!"
-
     def call
       @log = []
-      @log.concat(@home.furnish) unless @home.furnished?        
+      @log.concat(@home.furnish) unless @home.furnished?
       generate_arguards
       generate_entities
       generate_services
