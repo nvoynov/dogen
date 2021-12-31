@@ -15,23 +15,24 @@ module Dogen
 
     private_class_method :new
 
+    # !!! it must be called only in model home directory
     # @param dom [Domain] source model for code generation
-    # @param path [String] path to place generated code
-    def initialize(dom, path)
+    # @param base [String] base folder
+    def initialize(dom, base)
       @dom = GuardDomain.(dom)
-      @path = path
+      @base = base
+      @home = Home.new(base)
       @deco = Decorator
-      @meta = Cleon::MetaGem.new(path)
-      # services.rb: [build.rb, compile.rb, ...]
-      # entities.rb: [user.rb, credentials.rb, ...]
       @include = {}
       @templates = {}
       @renderers = {}
     end
 
+    CLONE_CLEON_MSG = "Clone Cleon to get service and entity abstractions!"
+
     def call
-      Cleon.clone_cleon(@path) unless @meta.cleon_gem?
       @log = []
+      @log.concat(@home.furnish) unless @home.furnished?        
       generate_arguards
       generate_entities
       generate_services
@@ -82,14 +83,11 @@ module Dogen
     end
 
     def write_file(name, content)
-      # TODO: real work with banner!
-      # @log << File.join(@path, filename)
-      filename = File.join(@path, name)
-      if File.exist?(filename)
-        FileUtils.cp filename, filename + '~'
+      if File.exist?(name)
+        FileUtils.cp name, name + '~'
         @log << name + '~'
       end
-      write_branded(filename, content, @dom.name)
+      write_branded(name, content, @dom.name)
       @log << name
     end
 
@@ -112,22 +110,22 @@ module Dogen
         cfg[:guards] = {
           code_erb: "#{Dogen.root}/lib/erb/arguards.rb.erb",
           spec_erb: "#{Dogen.root}/lib/erb/arguards_spec.rb.erb",
-          code_dir: "lib/#{@meta.base}",
-          spec_dir: "test/#{@meta.base}"
+          code_dir: "lib/#{@home.base}",
+          spec_dir: "test/#{@home.base}"
         }
         cfg[:service] = {
           code_erb: "#{Dogen.root}/lib/erb/service.rb.erb",
-          code_dir: "lib/#{@meta.base}/services",
           spec_erb: "#{Dogen.root}/lib/erb/service_spec.rb.erb",
-          spec_dir: "test/#{@meta.base}/services",
-          include: "lib/#{@meta.base}/services.rb"
+          code_dir: "lib/#{@home.base}/services",
+          spec_dir: "test/#{@home.base}/services",
+          include: "lib/#{@home.base}/services.rb"
         }
         cfg[:entity] = {
           code_erb: "#{Dogen.root}/lib/erb/entity.rb.erb",
-          code_dir: "lib/#{@meta.base}/entities",
           spec_erb: "#{Dogen.root}/lib/erb/entity_spec.rb.erb",
-          spec_dir: "test/#{@meta.base}/entities",
-          include: "lib/#{@meta.base}/entities.rb"
+          code_dir: "lib/#{@home.base}/entities",
+          spec_dir: "test/#{@home.base}/entities",
+          include: "lib/#{@home.base}/entities.rb"
         }
       end
     end

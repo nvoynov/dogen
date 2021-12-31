@@ -8,7 +8,12 @@ describe 'Generate Demo domain' do
 
   let(:created) {
     <<~EOF.lines.map(&:strip)
-      lib/temp/arguards.rb~
+      Clone Cleon to get service and entity abstractions!
+      lib/temp/services
+      lib/temp/entities
+      test/temp
+      test/temp/services
+      test/temp/entities
       lib/temp/arguards.rb
       test/temp/arguards_spec.rb
       lib/temp/entities/credentials.rb
@@ -23,9 +28,7 @@ describe 'Generate Demo domain' do
       test/temp/services/change_user_password_spec.rb
       lib/temp/services/select_users.rb
       test/temp/services/select_users_spec.rb
-      lib/temp/entities.rb~
       lib/temp/entities.rb
-      lib/temp/services.rb~
       lib/temp/services.rb
     EOF
   }

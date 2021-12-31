@@ -20,7 +20,7 @@ describe DogenBranded do
   let(:another) { 'another content' }
 
   it 'must take banner into account' do
-    Sandbox.() do
+    SpecTemp.() do
       branded.write(dogname, content)
       assert File.exist? dogname
       assert branded.file_branded?(dogname)

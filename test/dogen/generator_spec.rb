@@ -27,30 +27,63 @@ describe Generator do
 
   let(:created) {
     <<~EOF.lines.map(&:strip)
-      lib/temp/arguards.rb~
-      lib/temp/arguards.rb
-      test/temp/arguards_spec.rb
-      lib/temp/entities/user.rb
-      test/temp/entities/user_spec.rb
-      lib/temp/entities/orphan.rb
-      test/temp/entities/orphan_spec.rb
-      lib/temp/services/register.rb
-      test/temp/services/register_spec.rb
-      lib/temp/services/orphan.rb
-      test/temp/services/orphan_spec.rb
-      lib/temp/entities.rb~
-      lib/temp/entities.rb
-      lib/temp/services.rb~
-      lib/temp/services.rb
+      Cloning Cleon might help this skeleton
+      lib
+      lib/spec
+      lib/spec/services
+      lib/spec/entities
+      test
+      test/spec
+      test/spec/services
+      test/spec/entities
+      lib/spec/arguards.rb
+      test/spec/arguards_spec.rb
+      lib/spec/entities/user.rb
+      test/spec/entities/user_spec.rb
+      lib/spec/entities/orphan.rb
+      test/spec/entities/orphan_spec.rb
+      lib/spec/services/register.rb
+      test/spec/services/register_spec.rb
+      lib/spec/services/orphan.rb
+      test/spec/services/orphan_spec.rb
+      lib/spec/entities.rb
+      lib/spec/services.rb
     EOF
   }
 
-  describe '#call(dom, path)' do
-    it 'must generate list of :created' do
-      SpecGem.('temp') do
-        log = nil
-        _, _ = capture_io { log = Generator.(domain, Dir.pwd) }        
+  let(:furnished) {
+    <<~EOF.lines.map(&:strip)
+      lib/spec/arguards.rb
+      test/spec/arguards_spec.rb
+      lib/spec/entities/user.rb
+      test/spec/entities/user_spec.rb
+      lib/spec/entities/orphan.rb
+      test/spec/entities/orphan_spec.rb
+      lib/spec/services/register.rb
+      test/spec/services/register_spec.rb
+      lib/spec/services/orphan.rb
+      test/spec/services/orphan_spec.rb
+      lib/spec/entities.rb
+      lib/spec/services.rb
+    EOF
+  }
+
+  let(:base) { 'spec' }
+
+  describe '#call(dom, base)' do
+    it 'must generate list of :created when not cleoned' do
+      SpecTemp.() do
+        log = Generator.(domain, base)
         assert_equal created, log
+      end
+    end
+
+    it 'must generate list of :created when cleoned' do
+      SpecTemp.() do
+        home = Home.new(base)
+        home.furnish
+        log = Generator.(domain, base)
+        assert_equal furnished, log
       end
     end
   end

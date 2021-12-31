@@ -6,7 +6,7 @@ module Dogen
     extend self
 
     def sample
-      guard_stderr do
+      # guard_stderr do
         puts "Dogen: copying $ample domain.."
         unless Dir.exist?(DOMDIR)
           Dir.mkdir(DOMDIR)
@@ -14,17 +14,23 @@ module Dogen
         end
         sample = File.join(Dogen.root, "lib/erb/#{DOMSRC}")
         FileUtils.cp sample, sample_name
-      end
+      # end
     end
 
-    def dogen(model, dir)
+    def dogen(model)
       guard_stderr do
+        puts "load #{model}.."
         domain = load(model)
-        dir = sanitize(domain.name) unless dir
-        puts "Dogen: generate skeleton for '#{domain.name}'.."
-        prepare_skeleton(dir)
-        log = Generator.(domain, dir)
-        log.each{|l| puts "  created #{l}"}
+        home = Home.new(domain.name)
+        unless Dir.exist?(home.base)
+          puts "create home #{home.base}.."
+          Dir.mkdir(home.base)
+        end
+        puts "Dogen generates skeleton in '#{home.base}'.."
+        Dir.chdir(home.base) do
+          log = Generator.(domain, home.base)
+          log.each{|l| puts "  created #{l}"}
+        end
       end
     end
 
@@ -36,37 +42,6 @@ module Dogen
 
     def sanitize(str)
       str.downcase.strip.gsub(/\s{1,}/, '_')
-    end
-
-    def prepare_skeleton(dir)
-      puts "Preparing skeleton directory..."
-
-      dirs = <<~EOF.lines.map(&:strip)
-        #{dir}
-        #{dir}/lib
-        #{dir}/lib/#{dir}
-        #{dir}/test
-      EOF
-
-      srcs = <<~EOF.lines.map(&:strip)
-        #{dir}/lib/#{dir}/version.rb
-        #{dir}/lib/#{dir}.rb
-        #{dir}/#{dir}.gemspec
-      EOF
-
-      dirs.each do |d|
-        unless Dir.exist?(d)
-          Dir.mkdir(d)
-          puts "  created #{d}"
-        end
-      end
-
-      srcs.each do |src|
-        unless File.exist?(src)
-          File.write(src, '')
-          puts "  created #{src}"
-        end
-      end
     end
 
     def guard_stderr

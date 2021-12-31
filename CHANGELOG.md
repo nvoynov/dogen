@@ -1,24 +1,25 @@
 ## [Unreleased]
 
-it generates, but no compile at the moment ... something with arguard, try by hand .. but it require "cli"
-
-dog
-doc/users.rb  
-lib
-lib/users
-lib/users.rb
-test
-
-$ dogen mod/users.rb - reads the model and generate, it's only destity to generate!
 
 TODO
 
-- [ ] Cleon should have option to clone with using Guards, because it damn convenient to have `cleon service register_user name email --advanced`
-- [ ] Refactor Cleon::Generator based on Dogen::Generator
+вычистить от необходимости иметь структуру вообще!!!!!!!!
+проверить один раз, что если есть структура немного иной журнал
+
+- [ ] Remove MetaGem, we dont need .gemspec its about Cleon
+- [ ] Release and get Rubygem badge!
+- [ ] Add more tests for CLI
+- [ ] Report about the work done - number of files, loc, comments, etc.
 - [ ] Explore possible DSL errors Error handlers
 - [ ] Try entities as service and entities parameters!
 - [ ] Sinatra API generator
 - [ ] Client library generator for Sinatra API
+
+## [0.3.0] - 2021-12-31
+
+- Updated dependencies, Cleon ~> 0.4.0
+- Changed generator behavior. Now it does not require Cleon, but recommend.
+- Added basic tests for CLI with rake install SETUP
 
 ## [0.2.0] - 2021-12-26
 

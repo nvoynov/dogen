@@ -8,6 +8,6 @@ describe Dogen do
   end
 
   it 'must respond to :root' do
-    assert_respond_to :root, Dogen
+    assert_respond_to Dogen, :root
   end
 end
