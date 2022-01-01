@@ -29,6 +29,8 @@ module Dogen
         log = Generator.(domain, home.base)
         log.each{|l| puts "  created #{l}"}
       end
+    rescue StandardError => e
+      puts e.message
     end
 
     def sample_name
@@ -37,9 +39,9 @@ module Dogen
 
     private
 
-    def sanitize(str)
-      str.downcase.strip.gsub(/\s{1,}/, '_')
-    end
+    # def sanitize(str)
+    #   str.downcase.strip.gsub(/\s{1,}/, '_')
+    # end
 
     DOMSRC = 'sample.dogen'
     DOMDIR = 'model'

@@ -8,12 +8,13 @@ module Dogen
 
     def self.call(source)
       code = File.read(source)
-      dsl = new("Unknown", source)
+      dsl = new("Unknown", "")
       dsl.read(code)
+      dsl.dom
     end
 
     def read(code)
-      self.instance_eval code
+      instance_eval code
       dom
     rescue NameError => e
       line = nil
@@ -33,7 +34,7 @@ module Dogen
 
     def error!(message, line = 0)
       message = error_message(message, line) + ?\n + DEBUG_DSL_TIP
-      raise DSL::Error, message, caller(1,2)
+      raise DSL::Error, message
     end
 
     def error_message(message, line)

@@ -46,6 +46,9 @@ describe DSLReader do
         File.write(dsl_source, argerror)
         err = assert_raises(DSL::Error) { SpecReader.(dsl_source) }
         assert_match %r{must be String stands for Proc}, err.message
+
+        err = assert_raises(DSL::Error) { DSLReader.(dsl_source) }
+        assert_match %r{must be String stands for Proc}, err.message
       end
     end
 

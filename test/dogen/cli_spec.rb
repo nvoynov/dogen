@@ -45,22 +45,38 @@ describe CLI do
   end
 
   describe '#dogen' do
-    let(:source) { 'failed.dogen' }
-    let(:failed) {
+    let(:source) { 'spec.dogen' }
+
+    let(:valid)  {
       <<~EOF
         name 'user'
-        fail
+        desc 'user domain'
       EOF
     }
-    let(:output) {
-      "undefined local variable or method 'fail', line: 1"
+
+    let(:wrong) {
+      <<~EOF
+        name 'user'
+        wrong
+      EOF
     }
+
+    let(:output) {
+      "undefined local variable or method 'wrong', line: 1"
+    }
+
+    it 'must generate valid file' do
+      SpecTemp.() do
+        File.write(source, valid)
+        _, _ = capture_io { CLI.dogen(source) }
+      end
+    end
+
     it 'must print script reading errors' do
       SpecTemp.() do
-        File.write(source, failed)
-        CLI.dogen(source)
-        # out, err = capture_io { CLI.dogen(source) }
-        # assert_match %r{#{output}}, out
+        File.write(source, wrong)
+        out, _ = capture_io { CLI.dogen(source) }
+        assert_match output, out
       end
     end
   end
