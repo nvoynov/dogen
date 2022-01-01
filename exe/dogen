@@ -2,22 +2,20 @@
 
 require "bundler/setup"
 require "dogen"
+include Dogen
 
 def banner_and_exit
   puts Dogen::CLI::BANNER
   exit
 end
 
-# dogen $ample ==
-# dogen model dir ARGV.size
-
 arg1 = ARGV.shift
 arg2 = ARGV.shift
 banner_and_exit unless arg1
 
 if arg1.downcase == '$ample'
-  Dogen::CLI.sample
+  CLI.sample
   exit
 end
 
-Dogen::CLI.dogen(arg1)
+CLI.dogen(arg1)

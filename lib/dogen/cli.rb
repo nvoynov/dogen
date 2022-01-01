@@ -1,35 +1,33 @@
+require 'fileutils'
 require_relative 'version'
+require_relative 'dsl_reader'
 
 module Dogen
   module CLI
     extend self
 
     def sample
-      # guard_stderr do
-        puts "Dogen: copying $ample domain.."
-        unless Dir.exist?(DOMDIR)
-          Dir.mkdir(DOMDIR)
-          puts "  created #{DOMDIR}"
-        end
-        sample = File.join(Dogen.root, "lib/erb/#{DOMSRC}")
-        FileUtils.cp sample, sample_name
-      # end
+      puts "Dogen: copying $ample domain.."
+      unless Dir.exist?(DOMDIR)
+        Dir.mkdir(DOMDIR)
+        puts "  created #{DOMDIR}"
+      end
+      sample = File.join(Dogen.root, "lib/erb/#{DOMSRC}")
+      FileUtils.cp sample, sample_name
     end
 
     def dogen(model)
-      guard_stderr do
-        puts "load #{model}.."
-        domain = load(model)
-        home = Home.new(domain.name)
-        unless Dir.exist?(home.base)
-          puts "create home #{home.base}.."
-          Dir.mkdir(home.base)
-        end
-        puts "Dogen generates skeleton in '#{home.base}'.."
-        Dir.chdir(home.base) do
-          log = Generator.(domain, home.base)
-          log.each{|l| puts "  created #{l}"}
-        end
+      puts "load #{model}.."
+      domain = DSLReader.(model)
+      home = Home.new(domain.name)
+      unless Dir.exist?(home.base)
+        puts "create home #{home.base}.."
+        Dir.mkdir(home.base)
+      end
+      puts "Dogen generates skeleton in '#{home.base}'.."
+      Dir.chdir(home.base) do
+        log = Generator.(domain, home.base)
+        log.each{|l| puts "  created #{l}"}
       end
     end
 
@@ -41,18 +39,6 @@ module Dogen
 
     def sanitize(str)
       str.downcase.strip.gsub(/\s{1,}/, '_')
-    end
-
-    def guard_stderr
-      yield
-    rescue StandardError => e
-      puts e.message
-      puts BANNER
-    end
-
-    def load(name)
-      code = File.read(name)
-      DSL.build {|dsl| dsl.instance_eval code }
     end
 
     DOMSRC = 'sample.dogen'

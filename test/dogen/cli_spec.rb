@@ -3,7 +3,6 @@ include Dogen
 
 describe CLI do
   describe 'dry-run dogen(model, dir)' do
-
     let(:output) {
       <<~EOF
         Dogen: generate skeleton for 'Users'..
@@ -41,6 +40,27 @@ describe CLI do
         _, _ = capture_io { CLI.sample }
         out, _ = capture_io { CLI.dogen(CLI.sample_name) }
         assert output, out
+      end
+    end
+  end
+
+  describe '#dogen' do
+    let(:source) { 'failed.dogen' }
+    let(:failed) {
+      <<~EOF
+        name 'user'
+        fail
+      EOF
+    }
+    let(:output) {
+      "undefined local variable or method 'fail', line: 1"
+    }
+    it 'must print script reading errors' do
+      SpecTemp.() do
+        File.write(source, failed)
+        CLI.dogen(source)
+        # out, err = capture_io { CLI.dogen(source) }
+        # assert_match %r{#{output}}, out
       end
     end
   end

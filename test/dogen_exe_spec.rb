@@ -19,7 +19,7 @@ describe 'dry-run exe/dogen' do
   describe '$ample' do
     it 'must copy sample.rb file into model dir' do
       SpecTemp.() do
-        _, _ = capture_subprocess_io { system "dogen $ample" }
+        _, _ = capture_subprocess_io { system "dogen $ample" }        
         assert File.exist?(CLI.sample_name)
       end
     end

@@ -77,19 +77,6 @@ module Dogen
       s
     end
 
-    def check_and_get_last_service!
-      s = @dom.services.last
-      raise ArgumentError.new(
-      <<~EOF
-        :param can only be used inside an service block
-        service 'register_user' do
-          param 'name', 'user name', type: 'username'
-        end
-      EOF
-      ) unless s
-      s
-    end
-
     def param(name, desc = '', type:, default: '#$%')
       s = check_and_get_last_service!
       # TODO: type might be entity!
@@ -103,6 +90,21 @@ module Dogen
       t = check_and_get_type!(type)
       a = Para.new(name, desc, type: t, default: default)
       s.add_result(a)
+    end
+
+    private
+
+    def check_and_get_last_service!
+      s = @dom.services.last
+      raise ArgumentError.new(
+      <<~EOF
+        :param can only be used inside an service block
+        service 'register_user' do
+          param 'name', 'user name', type: 'username'
+        end
+      EOF
+      ) unless s
+      s
     end
 
     def check_and_get_service!(name)
@@ -119,7 +121,6 @@ module Dogen
       ) unless s
       s
     end
-
   end
 
 end
