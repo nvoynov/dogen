@@ -1,4 +1,3 @@
-require 'cleon'
 require_relative 'version'
 
 module Dogen

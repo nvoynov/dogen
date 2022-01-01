@@ -1,5 +1,4 @@
 require 'erb'
-require 'cleon'
 require_relative 'decorator'
 require_relative 'branded'
 
