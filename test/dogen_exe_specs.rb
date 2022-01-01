@@ -1,6 +1,7 @@
 require_relative 'spec_helper'
 include Dogen
 
+# fails on GitHub build
 describe 'dry-run exe/dogen' do
 
   SETUP = begin
