@@ -5,25 +5,24 @@ module Dogen
   # Branded file is a file with Dogen banner at the beginning of the fiele
   module BrandedFile
     # writes file with streamer
-    def write_branded(name, body, model)
-      timestamp = Time.now.strftime('%B %e, %Y at %H:%M:%S')
-      body_hash = md5(body)
-      branded_body = [BANNER % [body_hash, timestamp, model], body].join
-      File.write(name, branded_body)
+    def write_branded(name, body)
+      hash = md5(body)
+      brnd = [BANNER % hash, body].join
+      File.write(name, brnd)
     end
 
     # tests if file is branded
     def file_branded?(name)
       bann, _ = read_branded(name)
-      chk0, chk5 = BANNER.lines.then{|l| [l[0], l[5]]}
-      ban0, ban5 = bann.lines.then{|l| [l[0], l[5]]}
-      (ban0 == chk0) && (ban5 == chk5)
+      chk0, chk1 = BANNER.lines.then{|l| [l[0], l[1]]}
+      ban0, ban1 = bann.lines.then{|l| [l[0], l[1]]}
+      (ban0 == chk0) && (ban1 == chk1)
     end
 
     # test if branded content changed
     def file_changed?(name)
       bann, body = read_branded(name)
-      md5 = bann.lines[1].match(%r{MD5: (.*)\Z})[1]
+      md5 = bann.lines[2].match(%r{MD5: (.*)\Z})[1]
       md5 != md5(body)
     end
 
@@ -40,13 +39,9 @@ module Dogen
     end
 
     BANNER = <<~EOF
-      # This file created by Dogen domain generator
+      # This source created by code generator
+      # see: https://github.com/nvoynov/dogen
       # MD5: %s
-      # on %s
-      # The domain model "%s"
-      # --
-      # [Dogen](https://github.com/nvoynov/dogen)
-      # [Cleon](https://github.com/nvoynov/cleon)
       #
 
     EOF

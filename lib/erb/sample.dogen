@@ -1,4 +1,3 @@
-# This is an example how to build Cleon model for Users Managment
 name 'Users'
 desc 'Users Management (Cleon)'
 
@@ -35,40 +34,40 @@ type :password, 'password',
   spec: 'v.is_a?(String) && v.length.between?(8, 50)'
 
 entity :credentials do
-  atrb :email, 'email used as login', type: :email
-  atrb :password, 'password', type: :password
+  prop :email, 'email used as login', type: :email
+  prop :password, 'password', type: :password
 end
 
 entity :user do
-  atrb :uid, 'unique user identifier', type: :uuid, default: nil
-  atrb :name, 'name', type: :user_name
-  atrb :email, 'email', type: :email
+  prop :uid, 'unique user identifier', type: :uuid, default: nil
+  prop :name, 'name', type: :user_name
+  prop :email, 'email', type: :email
 end
 
 service :register_user do
-  param :name, 'name', type: :user_name
-  param :email, 'email', type: :email
-  param :password, 'password', type: :password
+  prop :name, 'name', type: :user_name
+  prop :email, 'email', type: :email
+  prop :password, 'password', type: :password
   result :user, 'registered user', type: :user
 end
 
 service :authenticate_user do
-  param :email, 'email', type: :email
-  param :password, 'password', type: :password
+  prop :email, 'email', type: :email
+  prop :password, 'password', type: :password
   result :user, 'registered user', type: :user
 end
 
 service :change_user_password do
-  param :email, 'email', type: :email
-  param :old_password, 'old password', type: :password
-  param :new_password, 'new password', type: :password
+  prop :email, 'email', type: :email
+  prop :old_password, 'old password', type: :password
+  prop :new_password, 'new password', type: :password
   result :user, 'user', type: :user
 end
 
 service :select_users do
-  param :filter, 'filter', type: :string256
-  param :order_by, 'order by', type: :string256
-  param :limit, 'limit items per page', type: :five_or_more
-  param :offset, 'page number', type: :zero_or_more
+  prop :filter, 'filter', type: :string256
+  prop :order_by, 'order by', type: :string256
+  prop :limit, 'limit items per page', type: :five_or_more
+  prop :offset, 'page number', type: :zero_or_more
   result :users, 'collection of users', type: :collection
 end

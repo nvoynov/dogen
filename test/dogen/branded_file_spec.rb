@@ -3,19 +3,15 @@ require_relative '../spec_helper'
 class DogenBranded
   include Dogen::BrandedFile
 
-  def initialize(model)
-    @model = model
-  end
-
   def write(name, body)
-    write_branded(name, body, @model)
+    write_branded(name, body)
   end
 end
 
 describe DogenBranded do
 
   let(:dogname) { 'dogen.rb' }
-  let(:branded) { DogenBranded.new('Dogen') }
+  let(:branded) { DogenBranded.new }
   let(:content) { 'some branded content' }
   let(:another) { 'another content' }
 

@@ -84,7 +84,7 @@ module Dogen
         FileUtils.cp name, name + '~'
         @log << name + '~'
       end
-      write_branded(name, content, @dom.name)
+      write_branded(name, content)
       @log << name
     end
 

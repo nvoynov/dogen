@@ -11,12 +11,12 @@ describe Generator do
         spec: 'v.is_a?(String) && v.length <= 256'
 
       entity :user, 'Registered User' do
-        atrb :name, 'the name of the user', :type => :string
+        prop :name, 'the name of the user', :type => :string
       end
 
       service :register, 'Register a new user' do
-        param :name, 'name of a new user', :type => :string
-        param :secret, 'secret of a new user', :type => :string
+        para :name, 'name of a new user', :type => :string
+        para :secret, 'secret of a new user', :type => :string
         result :user, 'registered user', :type => :user
       end
 

@@ -56,14 +56,14 @@ module Dogen
         <<~EOF
           :atrb can only be used inside an entity block
           entity 'user' do
-            atrb 'name', 'user name', type: 'username'
+            prop 'name', 'user name', type: 'username'
           end
         EOF
       ) unless e
       e
     end
 
-    def atrb(name, desc = '', type:, default: '#$%')
+    def property(name, desc = '', type:, default: '#$%')
       e = check_and_get_entity!
       t = check_and_get_type!(type)
       a = Para.new(name, desc, type: t, default: default)
@@ -77,7 +77,7 @@ module Dogen
       s
     end
 
-    def param(name, desc = '', type:, default: '#$%')
+    def parameter(name, desc = '', type:, default: '#$%')
       s = check_and_get_last_service!
       # TODO: type might be entity!
       t = check_and_get_type!(type)
@@ -92,6 +92,9 @@ module Dogen
       s.add_result(a)
     end
 
+    alias :prop :property
+    alias :para :parameter
+
     private
 
     def check_and_get_last_service!
@@ -100,7 +103,7 @@ module Dogen
       <<~EOF
         :param can only be used inside an service block
         service 'register_user' do
-          param 'name', 'user name', type: 'username'
+          para 'name', 'user name', type: 'username'
         end
       EOF
       ) unless s
@@ -113,7 +116,7 @@ module Dogen
       <<~EOF
         to use :sevice one should define it first
         service 'register_user' do
-          param 'name', 'user name', type: 'username'
+          para 'name', 'user name', type: 'username'
         end
         web 'register_user', :service => :register_user
         lib 'register_user', :service => :register_user
