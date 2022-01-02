@@ -7,7 +7,7 @@ Welcome to the Dogen! It develops the ideas inherent in [Cleon](https://github.c
 
 Basically, Cleon brings structure of services, entities, and gets the ability to create skeletons of these abstractions. But what happens when we shape it into a model, and what such model can bring us?
 
-For a while I was brooding over some source code generators and finished with something similar to following and then develop the idea further in [demo_domain.dogen](https://github.com/nvoynov/dogen/blob/master/lib/erb/demo_domain.dogen) that serves as an example of [User Domain](https://github.com/nvoynov/cleon-users).
+For a while I was brooding over some source code generators and finished with something similar to following and then develop the idea further in [sample.dogen](https://github.com/nvoynov/dogen/blob/master/lib/erb/sample.dogen) that serves as an example of [User Domain](https://github.com/nvoynov/cleon-users).
 
 ```ruby
 Model.build do
